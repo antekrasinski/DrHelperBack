@@ -2,10 +2,11 @@
 
 namespace DrHelperBack.DTOs
 {
-    public class UserTypeCreateDTO
+    public class DiseaseCreateDTO
     {
         [Required]
-        [MaxLength(20)]
-        public string type { get; set; }
+        [MaxLength(100)]
+        public string name { get; set; }
     }
 }
+

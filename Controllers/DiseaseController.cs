@@ -8,52 +8,52 @@ using System.Collections.Generic;
 
 namespace DrHelperBack.Controllers
 {
-    [Route("api/user_types")]
+    [Route("api/diseases")]
     [ApiController]
-    public class UserTypesController : ControllerBase
+    public class DiseaseController : Controller
     {
-        private readonly IDrHelperRepo<UserType> _repository;
+        private readonly IDrHelperRepo<Disease> _repository;
         private readonly IMapper _mapper;
 
-        public UserTypesController(IDrHelperRepo<UserType> repository, IMapper mapper)
+        public DiseaseController(IDrHelperRepo<Disease> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserTypeReadDTO>> GetUserTypes()
+        public ActionResult<IEnumerable<DiseaseReadDTO>> GetDiseases()
         {
             var items = _repository.GetAll();
 
-            return Ok(_mapper.Map<IEnumerable<UserTypeReadDTO>>(items));
+            return Ok(_mapper.Map<IEnumerable<DiseaseReadDTO>>(items));
         }
 
-        [HttpGet("{id}", Name = "GetUserType")]
-        public ActionResult<UserTypeReadDTO> GetUserType(int id)
+        [HttpGet("{id}", Name = "GetDisease")]
+        public ActionResult<DiseaseReadDTO> GetDisease(int id)
         {
             var item = _repository.GetById(id);
             if (item != null)
             {
-                return Ok(_mapper.Map<UserTypeReadDTO>(item));
+                return Ok(_mapper.Map<DiseaseReadDTO>(item));
             }
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult<UserTypeCreateDTO> CreateUserType(UserTypeCreateDTO dto)
+        public ActionResult<DiseaseCreateDTO> CreateDisease(DiseaseCreateDTO dto)
         {
-            var typeModel = _mapper.Map<UserType>(dto);
+            var typeModel = _mapper.Map<Disease>(dto);
             _repository.Create(typeModel);
             _repository.SaveChanges();
 
-            var readDTO = _mapper.Map<UserTypeReadDTO>(typeModel);
+            var readDTO = _mapper.Map<DiseaseReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetUserType), new { id = readDTO.id_user_type }, readDTO);
+            return CreatedAtRoute(nameof(GetDisease), new { id = readDTO.id_disease }, readDTO);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateUserType(int id, UserTypeCreateDTO dto)
+        public ActionResult UpdateDisease(int id, DiseaseCreateDTO dto)
         {
             var modelFromRepo = _repository.GetById(id);
             if (modelFromRepo == null)
@@ -71,7 +71,7 @@ namespace DrHelperBack.Controllers
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PartialUserTypeUpdate(int id, JsonPatchDocument<UserTypeCreateDTO> patchDoc)
+        public ActionResult PartialDiseaseUpdate(int id, JsonPatchDocument<DiseaseCreateDTO> patchDoc)
         {
 
             var modelFromRepo = _repository.GetById(id);
@@ -80,7 +80,7 @@ namespace DrHelperBack.Controllers
                 return NotFound();
             }
 
-            var typeToPatch = _mapper.Map<UserTypeCreateDTO>(modelFromRepo);
+            var typeToPatch = _mapper.Map<DiseaseCreateDTO>(modelFromRepo);
             patchDoc.ApplyTo(typeToPatch, ModelState);
             if (!TryValidateModel(typeToPatch))
             {
@@ -97,7 +97,7 @@ namespace DrHelperBack.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteUserType(int id)
+        public ActionResult DeleteDisease(int id)
         {
             var modelFromRepo = _repository.GetById(id);
             if (modelFromRepo == null)
@@ -111,3 +111,4 @@ namespace DrHelperBack.Controllers
         }
     }
 }
+

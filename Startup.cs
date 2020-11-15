@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using DrHelperBack.Data;
+using DrHelperBack.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace DrHelperBack
 {
@@ -30,16 +25,22 @@ namespace DrHelperBack
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DrHelperContext>(opt => opt.UseSqlServer
-            (Configuration.GetConnectionString("DrHelperBDConnection")));
+            (Configuration.GetConnectionString("DrHelperDBConnection")));
 
-            services.AddControllers().AddNewtonsoftJson(s => 
-            { 
-                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); 
-            }); 
+            services.AddControllers().AddNewtonsoftJson(s =>
+            {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<IDrHelperRepo, SqlDrHelperRepo>();
+            services.AddScoped<IDrHelperRepo<UserType>, SqlUserTypeRepo>();
+
+            services.AddScoped<IDrHelperRepo<Disease>, SqlDiseaseRepo>();
+
+            services.AddScoped<IDrHelperRepo<User>, SqlUserRepo>();
+
+            services.AddScoped<IDrHelperRepo<Medicine>, SqlMedicineRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

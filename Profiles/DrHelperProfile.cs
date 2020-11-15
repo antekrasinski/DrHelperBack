@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using DrHelperBack.DTOs;
 using DrHelperBack.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DrHelperBack.Profiles
 {
@@ -14,9 +9,21 @@ namespace DrHelperBack.Profiles
         public DrHelperProfile()
         {
             //Source -> Target
+            CreateMap<Disease, DiseaseReadDTO>();
+            CreateMap<DiseaseCreateDTO, Disease>();
+            CreateMap<Disease, DiseaseCreateDTO>();
+
             CreateMap<UserType, UserTypeReadDTO>();
             CreateMap<UserTypeCreateDTO, UserType>();
             CreateMap<UserType, UserTypeCreateDTO>();
+
+            CreateMap<User, UserReadDTO>();
+            CreateMap<UserCreateDTO, User>();
+            CreateMap<User, UserCreateDTO>();
+
+            CreateMap<Medicine, MedicineReadDTO>();
+            CreateMap<MedicineCreateDTO, Medicine>();
+            CreateMap<Medicine, MedicineCreateDTO>();
         }
     }
 }

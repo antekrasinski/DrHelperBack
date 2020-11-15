@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace DrHelperBack.DTOs
+﻿namespace DrHelperBack.DTOs
 {
     public class UserTypeReadDTO
     {

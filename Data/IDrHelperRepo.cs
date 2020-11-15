@@ -1,20 +1,14 @@
-﻿using DrHelperBack.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DrHelperBack.Data
 {
-    public interface IDrHelperRepo
+    public interface IDrHelperRepo<T>
     {
         bool SaveChanges();
-        IEnumerable<UserType> GetUserTypes();
-
-        UserType GetUserType(int id);
-
-        void CreateUserType(UserType type);
-        void UpdateUserType(UserType type);
-        void DeleteUserType(UserType type);
+        IEnumerable<T> GetAll();
+        T GetById(int id);
+        void Create(T newOne);
+        void Update(T oneToUpdate);
+        void Delete(T oneToDelete);
     }
 }
