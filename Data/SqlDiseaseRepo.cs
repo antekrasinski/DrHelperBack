@@ -21,7 +21,7 @@ namespace DrHelperBack.Data
                 throw new ArgumentNullException(nameof(newOne));
             }
 
-            _context.disease.Add(newOne);
+            _context.Disease.Add(newOne);
         }
 
         public void Delete(Disease oneToDelete)
@@ -30,17 +30,17 @@ namespace DrHelperBack.Data
             {
                 throw new ArgumentNullException(nameof(oneToDelete));
             }
-            _context.disease.Remove(oneToDelete);
+            _context.Disease.Remove(oneToDelete);
         }
 
         public Disease GetById(int id)
         {
-            return _context.disease.FirstOrDefault(p => p.id_disease == id);
+            return _context.Disease.FirstOrDefault(p => p.idDisease == id);
         }
 
         public IEnumerable<Disease> GetAll()
         {
-            return _context.disease.ToList();
+            return _context.Disease.ToList();
         }
 
         public bool SaveChanges()

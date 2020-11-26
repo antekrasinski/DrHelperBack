@@ -24,6 +24,14 @@ namespace DrHelperBack.Profiles
             CreateMap<Medicine, MedicineReadDTO>();
             CreateMap<MedicineCreateDTO, Medicine>();
             CreateMap<Medicine, MedicineCreateDTO>();
+
+            CreateMap<Timeblock, TimeblockReadDTO>();
+            CreateMap<TimeblockCreateDTO, Timeblock>();
+            CreateMap<Timeblock, TimeblockCreateDTO>();
+
+            CreateMap<UsersDiseases, UsersDiseasesReadDTO>();
+            CreateMap<UsersDiseasesCreateDTO, UsersDiseases>();
+            CreateMap<UsersDiseases, UsersDiseasesCreateDTO>();
         }
     }
 }

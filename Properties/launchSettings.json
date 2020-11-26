@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/user_types",
+      "launchUrl": "api/userTypes",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "DrHelperBack": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/user_types",
+      "launchUrl": "api/userTypes",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

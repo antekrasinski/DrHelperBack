@@ -2,7 +2,7 @@
 {
     public class MedicineReadDTO
     {
-        public int id_medicine { get; set; }
+        public int idMedicine { get; set; }
         public string name { get; set; }
     }
 }

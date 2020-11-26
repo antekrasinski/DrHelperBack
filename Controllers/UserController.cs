@@ -47,7 +47,7 @@ namespace DrHelperBack.Controllers
         public ActionResult<UserCreateDTO> CreateUser(UserCreateDTO dto)
         {
             var typeModel = _mapper.Map<User>(dto);
-            var userTypeCheck = _repositoryUserType.GetById(dto.id_user_type);
+            var userTypeCheck = _repositoryUserType.GetById(dto.idUserType);
             if (userTypeCheck == null)
             {
                 return BadRequest("Non existent user type.");
@@ -58,7 +58,7 @@ namespace DrHelperBack.Controllers
 
             var readDTO = _mapper.Map<UserReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetUser), new { id = readDTO.id_user }, readDTO);
+            return CreatedAtRoute(nameof(GetUser), new { id = readDTO.idUser }, readDTO);
         }
 
         [HttpPut("{id}")]
@@ -69,7 +69,7 @@ namespace DrHelperBack.Controllers
             {
                 return NotFound();
             }
-            var userTypeCheck = _repositoryUserType.GetById(dto.id_user_type);
+            var userTypeCheck = _repositoryUserType.GetById(dto.idUserType);
             if (userTypeCheck == null)
             {
                 return BadRequest("Non existent user type.");
@@ -97,7 +97,7 @@ namespace DrHelperBack.Controllers
             var typeToPatch = _mapper.Map<UserCreateDTO>(modelFromRepo);
             patchDoc.ApplyTo(typeToPatch, ModelState);
 
-            var userTypeCheck = _repositoryUserType.GetById(typeToPatch.id_user_type);
+            var userTypeCheck = _repositoryUserType.GetById(typeToPatch.idUserType);
             if (userTypeCheck == null)
             {
                 return BadRequest("Non existent user type.");

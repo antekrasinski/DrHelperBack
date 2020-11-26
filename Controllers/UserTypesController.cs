@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace DrHelperBack.Controllers
 {
-    [Route("api/user_types")]
+    [Route("api/userTypes")]
     [ApiController]
     public class UserTypesController : ControllerBase
     {
@@ -49,7 +49,7 @@ namespace DrHelperBack.Controllers
 
             var readDTO = _mapper.Map<UserTypeReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetUserType), new { id = readDTO.id_user_type }, readDTO);
+            return CreatedAtRoute(nameof(GetUserType), new { id = readDTO.idUserType }, readDTO);
         }
 
         [HttpPut("{id}")]

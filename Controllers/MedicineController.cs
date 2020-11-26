@@ -10,7 +10,7 @@ namespace DrHelperBack.Controllers
 {
     [Route("api/medicine")]
     [ApiController]
-    public class MedicineController : Controller
+    public class MedicineController : ControllerBase
     {
         private readonly IDrHelperRepo<Medicine> _repository;
         private readonly IMapper _mapper;
@@ -49,7 +49,7 @@ namespace DrHelperBack.Controllers
 
             var readDTO = _mapper.Map<MedicineReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetMedicineById), new { id = readDTO.id_medicine }, readDTO);
+            return CreatedAtRoute(nameof(GetMedicineById), new { id = readDTO.idMedicine }, readDTO);
         }
 
         [HttpPut("{id}")]

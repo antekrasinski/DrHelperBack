@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DrHelperBack.Models
+namespace DrHelperBack.DTOs
 {
-    public class Timeblock
+    public class TimeblockCreateDTO
     {
-        [Key]
-        public int idTimeblock { get; set; }
         [Required]
-        public DateTime startTime { get; set; }
+        public string startTime { get; set; }
         [Required]
-        public DateTime endTime { get; set; }
+        public string endTime { get; set; }
         [Required]
         public bool avaliable { get; set; }
         [Required]

@@ -2,45 +2,46 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DrHelperBack.Data
 {
-    public class SqlMedicineRepo : IDrHelperRepo<Medicine>
+    public class SqlTimeblockRepo : IDrHelperRepo<Timeblock>
     {
         private readonly DrHelperContext _context;
 
-        public SqlMedicineRepo(DrHelperContext context)
+        public SqlTimeblockRepo(DrHelperContext context)
         {
             _context = context;
         }
 
-        public void Create(Medicine newOne)
+        public void Create(Timeblock newOne)
         {
             if (newOne == null)
             {
                 throw new ArgumentNullException(nameof(newOne));
             }
 
-            _context.Medicine.Add(newOne);
+            _context.Timeblock.Add(newOne);
         }
 
-        public void Delete(Medicine oneToDelete)
+        public void Delete(Timeblock oneToDelete)
         {
             if (oneToDelete == null)
             {
                 throw new ArgumentNullException(nameof(oneToDelete));
             }
-            _context.Medicine.Remove(oneToDelete);
+            _context.Timeblock.Remove(oneToDelete);
         }
 
-        public Medicine GetById(int id)
+        public Timeblock GetById(int id)
         {
-            return _context.Medicine.FirstOrDefault(p => p.idMedicine == id);
+            return _context.Timeblock.FirstOrDefault(p => p.idTimeblock == id);
         }
 
-        public IEnumerable<Medicine> GetAll()
+        public IEnumerable<Timeblock> GetAll()
         {
-            return _context.Medicine.ToList();
+            return _context.Timeblock.ToList();
         }
 
         public bool SaveChanges()
@@ -48,10 +49,9 @@ namespace DrHelperBack.Data
             return (_context.SaveChanges() >= 0);
         }
 
-        public void Update(Medicine oneToUpdate)
+        public void Update(Timeblock oneToUpdate)
         {
             //Pusto
         }
     }
-
 }

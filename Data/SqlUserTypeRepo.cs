@@ -21,7 +21,7 @@ namespace DrHelperBack.Data
                 throw new ArgumentNullException(nameof(newOne));
             }
 
-            _context.user_type.Add(newOne);
+            _context.UserType.Add(newOne);
         }
 
         public void Delete(UserType oneToDelete)
@@ -30,17 +30,17 @@ namespace DrHelperBack.Data
             {
                 throw new ArgumentNullException(nameof(oneToDelete));
             }
-            _context.user_type.Remove(oneToDelete);
+            _context.UserType.Remove(oneToDelete);
         }
 
         public UserType GetById(int id)
         {
-            return _context.user_type.FirstOrDefault(p => p.id_user_type == id);
+            return _context.UserType.FirstOrDefault(p => p.idUserType == id);
         }
 
         public IEnumerable<UserType> GetAll()
         {
-            return _context.user_type.ToList();
+            return _context.UserType.ToList();
         }
 
         public bool SaveChanges()
