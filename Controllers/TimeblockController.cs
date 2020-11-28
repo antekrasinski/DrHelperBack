@@ -44,7 +44,7 @@ namespace DrHelperBack.Controllers
             }
             return NotFound();
         }
-        
+        /*
         //TO DO
         [HttpPost]
         public ActionResult<TimeblockCreateDTO> CreateTimeblock(TimeblockCreateDTO dto)
@@ -136,7 +136,7 @@ namespace DrHelperBack.Controllers
             _repositoryTimeblock.SaveChanges();
 
             return NoContent();
-        }
+        }*/
 
         [HttpDelete("{id}")]
         public ActionResult DeleteTimeblock(int id)

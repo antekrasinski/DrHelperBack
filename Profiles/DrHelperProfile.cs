@@ -32,6 +32,18 @@ namespace DrHelperBack.Profiles
             CreateMap<UsersDiseases, UsersDiseasesReadDTO>();
             CreateMap<UsersDiseasesCreateDTO, UsersDiseases>();
             CreateMap<UsersDiseases, UsersDiseasesCreateDTO>();
+
+            CreateMap<Perscription, PerscriptionReadDTO>();
+            CreateMap<PerscriptionCreateDTO, Perscription>();
+            CreateMap<Perscription, PerscriptionCreateDTO>();
+
+            CreateMap<UsersPerscriptions, UsersPerscriptionsReadDTO>();
+            CreateMap<UsersPerscriptionsCreateDTO, UsersPerscriptions>();
+            CreateMap<UsersPerscriptions, UsersPerscriptionsCreateDTO>();
+
+            CreateMap<PerscriptionsMedicine, PerscriptionsMedicineReadDTO>();
+            CreateMap<PerscriptionsMedicineCreateDTO, PerscriptionsMedicine>();
+            CreateMap<PerscriptionsMedicine, PerscriptionsMedicineCreateDTO>();
         }
     }
 }

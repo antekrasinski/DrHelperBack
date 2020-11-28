@@ -10,12 +10,12 @@ namespace DrHelperBack.Controllers
 {
     [Route("api/userTypes")]
     [ApiController]
-    public class UserTypesController : ControllerBase
+    public class UserTypeController : ControllerBase
     {
         private readonly IDrHelperRepo<UserType> _repository;
         private readonly IMapper _mapper;
 
-        public UserTypesController(IDrHelperRepo<UserType> repository, IMapper mapper)
+        public UserTypeController(IDrHelperRepo<UserType> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

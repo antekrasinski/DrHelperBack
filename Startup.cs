@@ -45,6 +45,8 @@ namespace DrHelperBack
             services.AddScoped<IDrHelperRepo<Timeblock>, SqlTimeblockRepo>();
 
             services.AddScoped<IUsersDiseases, SqlUsersDiseasesRepo>();
+
+            services.AddScoped<IPerscriptionRepo, SqlPersriptionRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

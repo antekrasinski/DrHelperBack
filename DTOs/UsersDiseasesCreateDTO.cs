@@ -12,7 +12,7 @@ namespace DrHelperBack.DTOs
         public int idUser { get; set; }
         [Key]
         public int idDisease { get; set; }
-        public String occurrenceDate { get; set; }
+        public string occurrenceDate { get; set; }
         [MaxLength(200)]
         public string description { get; set; }
     }
