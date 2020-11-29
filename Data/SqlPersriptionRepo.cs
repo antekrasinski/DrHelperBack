@@ -81,7 +81,7 @@ namespace DrHelperBack.Data
             _context.Perscription.Remove(oneToDelete);
         }
 
-        public Perscription GetPerscpitionById(int idPerscription)
+        public Perscription GetPerscriptionById(int idPerscription)
         {
             return _context.Perscription.FirstOrDefault(p => p.idPerscription == idPerscription);
         }
@@ -100,6 +100,17 @@ namespace DrHelperBack.Data
         {
             return _context.UsersPerscriptions.Where(p => p.idUser == idUser).ToList();
         }
+
+        public PerscriptionsMedicine GetPerscriptionsMedicineByIds(int idPerscription, int idMedicine)
+        {
+            return _context.PerscriptionsMedicine.FirstOrDefault(p => p.idPerscription == idPerscription && p.idMedicine == idMedicine);
+        }
+
+        public UsersPerscriptions GetUsersPerscriptionByIds(int idUser, int idPerscription)
+        {
+            return _context.UsersPerscriptions.FirstOrDefault(p => p.idPerscription == idPerscription && p.idUser == idUser);
+        }
+
 
         public bool SaveChanges()
         {

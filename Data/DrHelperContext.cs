@@ -15,7 +15,9 @@ namespace DrHelperBack.Data
 
         public DbSet<Perscription> Perscription { get; set; }
         public DbSet<PerscriptionsMedicine> PerscriptionsMedicine { get; set; }
-        public DbSet<UsersPerscriptions> UsersPerscriptions { get; set; }        
+        public DbSet<UsersPerscriptions> UsersPerscriptions { get; set; }
+        public DbSet<UsersAppointments> UsersAppointments { get; set; }
+        public DbSet<Appointment> Appointment { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsersDiseases>()
@@ -24,6 +26,8 @@ namespace DrHelperBack.Data
                 .HasKey(o => new { o.idPerscription, o.idMedicine });
             modelBuilder.Entity<UsersPerscriptions>()
                 .HasKey(o => new { o.idUser, o.idPerscription });
+            modelBuilder.Entity<UsersAppointments>()
+                .HasKey(o => new { o.idUser, o.idAppointment });
         }
     }
 }

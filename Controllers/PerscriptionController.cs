@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using DrHelperBack.Data;
 using DrHelperBack.DTOs;
 using DrHelperBack.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DrHelperBack.Controllers
 {
@@ -27,14 +26,14 @@ namespace DrHelperBack.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{idUser}")]
+        [HttpGet("user/{idUser}")]
         public ActionResult<IEnumerable<PerscriptionReadDTO>> GetUsersPerscriptions(int idUser)
         {
             var items = _repositoryPerscription.GetPerscriptions(idUser);
             List<Perscription> perscriptionsList = null;
             foreach (UsersPerscriptions element in items)
             {
-                perscriptionsList.Add(_repositoryPerscription.GetPerscpitionById(element.idPerscription));
+                perscriptionsList.Add(_repositoryPerscription.GetPerscriptionById(element.idPerscription));
             }
             if (perscriptionsList == null)
             {
@@ -43,8 +42,8 @@ namespace DrHelperBack.Controllers
             return Ok(_mapper.Map<IEnumerable<PerscriptionReadDTO>>(perscriptionsList));
         }
 
-        [HttpGet("details/{idPerscription}")]
-        public ActionResult<IEnumerable<MedicineReadDTO>> GetPerscriptionDetails(int idPerscription)
+        [HttpGet("medicine/{idPerscription}")]
+        public ActionResult<IEnumerable<MedicineReadDTO>> GetPerscriptionsMedicine(int idPerscription)
         {
             var items = _repositoryPerscription.GetMedicine(idPerscription);
             List<Medicine> medicineList = null;
@@ -62,10 +61,32 @@ namespace DrHelperBack.Controllers
         [HttpGet("{id}", Name = "GetPerscription")]
         public ActionResult<PerscriptionReadDTO> GetPerscription(int id)
         {
-            var item = _repositoryPerscription.GetPerscpitionById(id);
+            var item = _repositoryPerscription.GetPerscriptionById(id);
             if (item != null)
             {
                 return Ok(_mapper.Map<PerscriptionReadDTO>(item));
+            }
+            return NotFound();
+        }
+
+        [HttpGet("medicine/{idPerscription}/{idMedicine}", Name = "GetPerscriptionsMedicine")]
+        public ActionResult<PerscriptionsMedicineReadDTO> GetPerscriptionsMedicine(int idPerscription, int idMedicine)
+        {
+            var item = _repositoryPerscription.GetPerscriptionsMedicineByIds(idPerscription, idMedicine);
+            if (item != null)
+            {
+                return Ok(_mapper.Map<PerscriptionsMedicineReadDTO>(item));
+            }
+            return NotFound();
+        }
+
+        [HttpGet("user/{idUser}/{idPerscription}", Name = "GetUsersPerscription")]
+        public ActionResult<UsersPerscriptionsReadDTO> GetUsersPerscription(int idUser, int idPerscription)
+        {
+            var item = _repositoryPerscription.GetPerscriptionsMedicineByIds(idUser, idPerscription);
+            if (item != null)
+            {
+                return Ok(_mapper.Map<UsersPerscriptionsReadDTO>(item));
             }
             return NotFound();
         }
@@ -89,7 +110,7 @@ namespace DrHelperBack.Controllers
         }
 
         [HttpPost]
-        [Route("connect")]
+        [Route("user")]
         public ActionResult<UsersPerscriptionsCreateDTO> ConnectUsers(UsersPerscriptionsCreateDTO dto)
         {
             var typeModel = _mapper.Map<UsersPerscriptions>(dto);
@@ -98,46 +119,65 @@ namespace DrHelperBack.Controllers
 
             var readDTO = _mapper.Map<UsersPerscriptionsReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetPerscription), new { id = readDTO.idPerscription }, readDTO);
+            return CreatedAtRoute(nameof(GetUsersPerscription), new { id = readDTO.idPerscription }, readDTO);
         }
 
         [HttpPost]
         [Route("medicine")]
         public ActionResult<PerscriptionsMedicineCreateDTO> ConnectMedicine(PerscriptionsMedicineCreateDTO dto)
         {
+            var perscriptionCheck = _repositoryPerscription.GetPerscriptionById(dto.idPerscription);
+            if (perscriptionCheck == null)
+            {
+                return BadRequest("Non existent perscription.");
+            }
+
+            var medicineCheck = _repositoryMedicine.GetById(dto.idMedicine);
+            if (medicineCheck == null)
+            {
+                return BadRequest("Non existent medicine.");
+            }
+
+            var perscriptionMedicineCheck = _repositoryPerscription.GetPerscriptionsMedicineByIds(dto.idPerscription, dto.idMedicine);
+            if (perscriptionMedicineCheck != null)
+            {
+                return BadRequest("Existent in database.");
+            }
             var typeModel = _mapper.Map<PerscriptionsMedicine>(dto);
             _repositoryPerscription.ConnectMedicine(typeModel);
             _repositoryPerscription.SaveChanges();
 
-            var readDTO = _mapper.Map<PerscriptionReadDTO>(typeModel);
+            var readDTO = _mapper.Map<PerscriptionsMedicineReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetPerscription), new { id = readDTO.idPerscription }, readDTO);
+            return CreatedAtRoute(nameof(GetPerscriptionsMedicine), new { idPerscription = readDTO.idPerscription, idMedicine = readDTO.idMedicine }, readDTO);
         }
 
-        //TO DO
-        /*[HttpPut("{id}")]
-        public ActionResult UpdateTimeblock(int id, TimeblockCreateDTO dto)
+        [HttpPut("{id}")]
+        public ActionResult UpdatePerscription(int id, PerscriptionCreateDTO dto)
         {
-            var modelFromRepo = _repositoryTimeblock.GetById(id);
+            var modelFromRepo = _repositoryPerscription.GetPerscriptionById(id);
             if (modelFromRepo == null)
             {
                 return NotFound();
             }
-            var userCheck = _repositoryUser.GetById(dto.idUser);
-            if (userCheck == null)
+
+            DateTime temp;
+            if (!DateTime.TryParse(dto.perscriptionDate, out temp))
             {
-                return BadRequest("Non existent user type.");
+                return BadRequest("Wrong date format.");
             }
 
             _mapper.Map(dto, modelFromRepo);
 
-            _repositoryTimeblock.Update(modelFromRepo);
+            _repositoryPerscription.Update();
 
-            _repositoryTimeblock.SaveChanges();
+            _repositoryPerscription.SaveChanges();
 
             return NoContent();
         }
 
+
+        /*
         //TO DO
         [HttpPatch("{id}")]
         public ActionResult PartialTimeblockUpdate(int id, JsonPatchDocument<TimeblockCreateDTO> patchDoc)
@@ -172,22 +212,52 @@ namespace DrHelperBack.Controllers
             return NoContent();
         }*/
 
-        [HttpDelete("{id}")]
-        public ActionResult DeletePerscription(int id)
+        [HttpDelete("medicine/{idPerscription}/{idMedicine}")]
+        public ActionResult DeletePerscription(int idPerscription, int idMedicine)
         {
-            var modelFromRepo = _repositoryPerscription.GetPerscpitionById(id);
+            var modelFromRepo = _repositoryPerscription.GetPerscriptionsMedicineByIds(idPerscription, idMedicine);
             if (modelFromRepo == null)
             {
                 return NotFound();
             }
-            
+
+            _repositoryPerscription.DeleteMedicineConnections(modelFromRepo);
+            _repositoryPerscription.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpDelete("user/{idUser}/{idPerscription}")]
+        public ActionResult DeleteUsersPerscription(int idUser, int idPerscription)
+        {
+            var modelFromRepo = _repositoryPerscription.GetUsersPerscriptionByIds(idUser, idPerscription);
+            if (modelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _repositoryPerscription.DeleteUsersConnections(modelFromRepo);
+            _repositoryPerscription.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePerscription(int id)
+        {
+            var modelFromRepo = _repositoryPerscription.GetPerscriptionById(id);
+            if (modelFromRepo == null)
+            {
+                return NotFound();
+            }
+
             var medicineList = _repositoryPerscription.GetMedicine(id);
-            foreach(PerscriptionsMedicine element in medicineList)
+            foreach (PerscriptionsMedicine element in medicineList)
             {
                 _repositoryPerscription.DeleteConnectionMedicine(element);
             }
 
-            var userList = _repositoryPerscription.GetUsersConnections().Where(p=>p.idPerscription == id);
+            var userList = _repositoryPerscription.GetUsersConnections().Where(p => p.idPerscription == id);
             foreach (UsersPerscriptions element in userList)
             {
                 _repositoryPerscription.DeleteUsersConnections(element);

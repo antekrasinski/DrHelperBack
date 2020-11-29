@@ -42,7 +42,7 @@ namespace DrHelperBack
 
             services.AddScoped<IDrHelperRepo<Medicine>, SqlMedicineRepo>();
 
-            services.AddScoped<IDrHelperRepo<Timeblock>, SqlTimeblockRepo>();
+            services.AddScoped<ITimeblockRepo, SqlTimeblockRepo>();
 
             services.AddScoped<IUsersDiseases, SqlUsersDiseasesRepo>();
 

@@ -16,10 +16,10 @@ namespace DrHelperBack.Controllers
     public class TimeblockController : ControllerBase
     {
         private readonly IDrHelperRepo<User> _repositoryUser;
-        private readonly IDrHelperRepo<Timeblock> _repositoryTimeblock;
+        private readonly ITimeblockRepo _repositoryTimeblock;
         private readonly IMapper _mapper;
 
-        public TimeblockController(IDrHelperRepo<User> repositoryUser, IDrHelperRepo<Timeblock> repositoryTimeblock, IMapper mapper)
+        public TimeblockController(IDrHelperRepo<User> repositoryUser, ITimeblockRepo repositoryTimeblock, IMapper mapper)
         {
             _repositoryUser = repositoryUser;
             _repositoryTimeblock = repositoryTimeblock;
@@ -44,8 +44,14 @@ namespace DrHelperBack.Controllers
             }
             return NotFound();
         }
-        /*
-        //TO DO
+
+        [HttpGet("user/{id}")]
+        public ActionResult<TimeblockReadDTO> GetUsersTimeblocks(int id)
+        {
+            var items = _repositoryTimeblock.GetUsersTimeblocks(id);
+            return Ok(_mapper.Map<IEnumerable<TimeblockReadDTO>>(items));
+        }
+
         [HttpPost]
         public ActionResult<TimeblockCreateDTO> CreateTimeblock(TimeblockCreateDTO dto)
         {
@@ -80,6 +86,47 @@ namespace DrHelperBack.Controllers
             return CreatedAtRoute(nameof(GetTimeblock), new { id = readDTO.idTimeblock }, readDTO);
         }
 
+        [HttpPost]
+        [Route("shift")]
+        public ActionResult<IEnumerable<TimeblockCreateDTO>> CreateShift(ShiftDTO dto)
+        {
+            var userCheck = _repositoryUser.GetById(dto.idUser);
+            if (userCheck == null)
+            {
+                return BadRequest("Non existent user type.");
+            }
+
+            if (!DateTime.TryParse(dto.shiftStart, out DateTime start))
+            {
+                return BadRequest("Wrong shiftStart date format.");
+            }
+            if (!DateTime.TryParse(dto.shiftEnd, out DateTime end))
+            {
+                return BadRequest("Wrong shiftEnd date format.");
+            }
+            if (!TimeSpan.TryParse(dto.appointmentSpan, out TimeSpan span))
+            {
+                return BadRequest("Wrong appointmentSpan date format.");
+            }
+
+            DateTime temp = start;
+            if (start > end)
+            {     
+                temp = end;
+                end = start;
+                start = temp;
+            }
+
+            while((temp+span) <= end)
+            {
+                _repositoryTimeblock.Create(new Timeblock { startTime = temp, endTime = temp+span, avaliable = true, idUser=dto.idUser });
+                temp += span;
+            }
+            _repositoryTimeblock.SaveChanges();
+            var items = _repositoryTimeblock.GetUsersTimeblocks(dto.idUser).Where(t => t.startTime >= start && t.endTime <= end);
+            return Ok(_mapper.Map<IEnumerable<TimeblockReadDTO>>(items));
+        }
+        /*
         //TO DO
         [HttpPut("{id}")]
         public ActionResult UpdateTimeblock(int id, TimeblockCreateDTO dto)

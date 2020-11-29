@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DrHelperBack.Data
 {
-    public class SqlTimeblockRepo : IDrHelperRepo<Timeblock>
+    public class SqlTimeblockRepo : ITimeblockRepo
     {
         private readonly DrHelperContext _context;
 
@@ -52,6 +52,11 @@ namespace DrHelperBack.Data
         public void Update(Timeblock oneToUpdate)
         {
             //Pusto
+        }
+
+        public IEnumerable<Timeblock> GetUsersTimeblocks(int idUser)
+        {
+            return _context.Timeblock.Where(t => t.idUser == idUser).ToList();
         }
     }
 }

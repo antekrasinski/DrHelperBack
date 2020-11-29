@@ -9,7 +9,9 @@ namespace DrHelperBack.Data
         IEnumerable<UsersPerscriptions> GetPerscriptions(int idUser);
         IEnumerable<PerscriptionsMedicine> GetMedicine(int idPerscription);
         IEnumerable<UsersPerscriptions> GetUsersConnections();
-        Perscription GetPerscpitionById(int idPerscription);
+        Perscription GetPerscriptionById(int idPerscription);
+        PerscriptionsMedicine GetPerscriptionsMedicineByIds(int idPerscription, int idMedicine);
+        UsersPerscriptions GetUsersPerscriptionByIds(int idUser, int idPerscription);
         void Create(Perscription newOne);
         void ConnectMedicine(PerscriptionsMedicine newOne);
         void ConnectUsers(UsersPerscriptions newOne);
