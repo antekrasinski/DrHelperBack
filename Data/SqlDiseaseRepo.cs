@@ -33,6 +33,15 @@ namespace DrHelperBack.Data
             _context.Disease.Remove(oneToDelete);
         }
 
+        public void DeleteAll()
+        {
+            var list = _context.Disease.ToList();
+            foreach(var element in list)
+            {
+                _context.Disease.Remove(element);
+            }
+        }
+
         public Disease GetById(int id)
         {
             return _context.Disease.FirstOrDefault(p => p.idDisease == id);

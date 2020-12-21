@@ -33,6 +33,11 @@ namespace DrHelperBack.Data
             _context.UserType.Remove(oneToDelete);
         }
 
+        public void DeleteAll()
+        {
+
+        }
+
         public UserType GetById(int id)
         {
             return _context.UserType.FirstOrDefault(p => p.idUserType == id);

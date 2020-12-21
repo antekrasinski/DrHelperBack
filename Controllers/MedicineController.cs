@@ -109,6 +109,14 @@ namespace DrHelperBack.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete]
+        public ActionResult DeleteAllMedicine()
+        {
+            _repository.DeleteAll();
+            _repository.SaveChanges();
+            return NoContent();
+        }
     }
 
 }
