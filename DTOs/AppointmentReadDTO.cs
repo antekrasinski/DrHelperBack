@@ -9,6 +9,5 @@ namespace DrHelperBack.DTOs
     {
         public int idAppointment { get; set; }
         public string description { get; set; }
-        public int idTimeblock { get; set; }
     }
 }

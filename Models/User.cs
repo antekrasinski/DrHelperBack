@@ -16,7 +16,6 @@ namespace DrHelperBack.Models
         public string name { get; set; }
         [MaxLength(100)]
         public string surname { get; set; }
-        [Required]
         [MaxLength(200)]
         public string description { get; set; }
         [Required]

@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DrHelperBack.Models
 {
-    public class Perscription
+    public class Prescription
     {
         [Key]
-        public int idPerscription { get; set; }
+        public int idPrescription { get; set; }
         [Required]
-        public DateTime perscriptionDate { get; set; }
+        public DateTime prescriptionDate { get; set; }
     }
 }

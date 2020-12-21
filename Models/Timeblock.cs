@@ -18,5 +18,6 @@ namespace DrHelperBack.Models
         public bool avaliable { get; set; }
         [Required]
         public int idUser { get; set; }
+        public int idAppointment { get; set; }
     }
 }

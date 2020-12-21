@@ -15,11 +15,11 @@ namespace DrHelperBack.Controllers
     [ApiController]
     public class TimeblockController : ControllerBase
     {
-        private readonly IDrHelperRepo<User> _repositoryUser;
+        private readonly IUserRepo _repositoryUser;
         private readonly ITimeblockRepo _repositoryTimeblock;
         private readonly IMapper _mapper;
 
-        public TimeblockController(IDrHelperRepo<User> repositoryUser, ITimeblockRepo repositoryTimeblock, IMapper mapper)
+        public TimeblockController(IUserRepo repositoryUser, ITimeblockRepo repositoryTimeblock, IMapper mapper)
         {
             _repositoryUser = repositoryUser;
             _repositoryTimeblock = repositoryTimeblock;
@@ -49,6 +49,13 @@ namespace DrHelperBack.Controllers
         public ActionResult<TimeblockReadDTO> GetUsersTimeblocks(int id)
         {
             var items = _repositoryTimeblock.GetUsersTimeblocks(id);
+            return Ok(_mapper.Map<IEnumerable<TimeblockReadDTO>>(items));
+        }
+
+        [HttpGet("appointment/{id}")]
+        public ActionResult<TimeblockReadDTO> GetAppointmentTimeblocks(int id)
+        {
+            var items = _repositoryTimeblock.GetTimeblocksByAppointmentId(id);
             return Ok(_mapper.Map<IEnumerable<TimeblockReadDTO>>(items));
         }
 
@@ -119,15 +126,14 @@ namespace DrHelperBack.Controllers
 
             while((temp+span) <= end)
             {
-                _repositoryTimeblock.Create(new Timeblock { startTime = temp, endTime = temp+span, avaliable = true, idUser=dto.idUser });
+                _repositoryTimeblock.Create(new Timeblock { startTime = temp, endTime = temp+span, avaliable = true, idUser=dto.idUser, idAppointment=0 });
                 temp += span;
             }
             _repositoryTimeblock.SaveChanges();
             var items = _repositoryTimeblock.GetUsersTimeblocks(dto.idUser).Where(t => t.startTime >= start && t.endTime <= end);
             return Ok(_mapper.Map<IEnumerable<TimeblockReadDTO>>(items));
         }
-        /*
-        //TO DO
+
         [HttpPut("{id}")]
         public ActionResult UpdateTimeblock(int id, TimeblockCreateDTO dto)
         {
@@ -136,10 +142,10 @@ namespace DrHelperBack.Controllers
             {
                 return NotFound();
             }
-            var userCheck = _repositoryUser.GetById(dto.idUser);
-            if (userCheck == null)
+            var userTypeCheck = _repositoryUser.GetById(dto.idUser);
+            if (userTypeCheck == null)
             {
-                return BadRequest("Non existent user type.");
+                return BadRequest("Non existent user.");
             }
 
             _mapper.Map(dto, modelFromRepo);
@@ -150,40 +156,6 @@ namespace DrHelperBack.Controllers
 
             return NoContent();
         }
-
-        //TO DO
-        [HttpPatch("{id}")]
-        public ActionResult PartialTimeblockUpdate(int id, JsonPatchDocument<TimeblockCreateDTO> patchDoc)
-        {
-
-            var modelFromRepo = _repositoryTimeblock.GetById(id);
-            if (modelFromRepo == null)
-            {
-                return NotFound();
-            }
-
-            var typeToPatch = _mapper.Map<TimeblockCreateDTO>(modelFromRepo);
-            patchDoc.ApplyTo(typeToPatch, ModelState);
-
-            var userCheck = _repositoryUser.GetById(typeToPatch.idUser);
-            if (userCheck == null)
-            {
-                return BadRequest("Non existent user type.");
-            }
-
-            if (!TryValidateModel(typeToPatch))
-            {
-                return ValidationProblem(ModelState);
-            }
-
-            _mapper.Map(typeToPatch, modelFromRepo);
-
-            _repositoryTimeblock.Update(modelFromRepo);
-
-            _repositoryTimeblock.SaveChanges();
-
-            return NoContent();
-        }*/
 
         [HttpDelete("{id}")]
         public ActionResult DeleteTimeblock(int id)

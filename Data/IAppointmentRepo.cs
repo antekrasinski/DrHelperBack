@@ -11,7 +11,6 @@ namespace DrHelperBack.Data
         bool SaveChanges();
         IEnumerable<Appointment> GetAll();
         Appointment GetById(int id);
-        IEnumerable<UsersAppointments> GetUsersAppointments(int idUser);
         void Create(Appointment newOne);
         void Update(Appointment oneToUpdate);
         void Delete(Appointment oneToDelete);

@@ -8,10 +8,11 @@ namespace DrHelperBack.DTOs
 {
     public class UsersDiseasesCreateDTO
     {
-        [Key]
+        [Required]
         public int idUser { get; set; }
-        [Key]
+        [Required]
         public int idDisease { get; set; }
+        [Required]
         public string occurrenceDate { get; set; }
         [MaxLength(200)]
         public string description { get; set; }

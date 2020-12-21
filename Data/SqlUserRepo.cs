@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DrHelperBack.Data
 {
-    public class SqlUserRepo : IDrHelperRepo<User>
+    public class SqlUserRepo : IUserRepo
     {
         private readonly DrHelperContext _context;
 
@@ -36,6 +36,25 @@ namespace DrHelperBack.Data
         public IEnumerable<User> GetAll()
         {
             return _context.User.ToList();
+        }
+
+        public User Authenticate(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return null;
+
+            var user = _context.User.SingleOrDefault(x => x.username == username);
+
+            // check if username exists
+            if (user == null)
+                return null;
+
+            // check if password is correct
+            if (user.password != password)
+                return null;
+
+            // authentication successful
+            return user;
         }
 
         public User GetById(int id)

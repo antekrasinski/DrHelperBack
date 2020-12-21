@@ -58,5 +58,10 @@ namespace DrHelperBack.Data
         {
             return _context.Timeblock.Where(t => t.idUser == idUser).ToList();
         }
+
+        public IEnumerable<Timeblock> GetTimeblocksByAppointmentId(int idAppointment)
+        {
+            return _context.Timeblock.Where(t => t.idAppointment == idAppointment).ToList();
+        }
     }
 }

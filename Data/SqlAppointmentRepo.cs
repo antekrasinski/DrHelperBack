@@ -44,10 +44,6 @@ namespace DrHelperBack.Data
             return _context.Appointment.FirstOrDefault(p => p.idAppointment == id);
         }
 
-        public IEnumerable<UsersAppointments> GetUsersAppointments(int idUser)
-        {
-            return _context.UsersAppointments.Where(t => t.idUser == idUser).ToList();
-        }
 
         public bool SaveChanges()
         {

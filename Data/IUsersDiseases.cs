@@ -7,7 +7,7 @@ namespace DrHelperBack.Data
     {
         bool SaveChanges();
         IEnumerable<UsersDiseases> GetUsersDiseases(int idUser);
-        UsersDiseases GetByIds(int idUser, int idDisease);
+        UsersDiseases GetById(int idUsersDiseases);
         void Create(UsersDiseases newOne);
         void Update(UsersDiseases oneToUpdate);
         void Delete(UsersDiseases oneToDelete);

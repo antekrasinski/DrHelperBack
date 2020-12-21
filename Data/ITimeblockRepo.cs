@@ -12,6 +12,7 @@ namespace DrHelperBack.Data
         IEnumerable<Timeblock> GetAll();
         Timeblock GetById(int id);
         IEnumerable<Timeblock> GetUsersTimeblocks(int idUser);
+        IEnumerable<Timeblock> GetTimeblocksByAppointmentId(int idAppointment);
         void Create(Timeblock newOne);
         void Update(Timeblock oneToUpdate);
         void Delete(Timeblock oneToDelete);

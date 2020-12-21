@@ -7,6 +7,7 @@ namespace DrHelperBack.DTOs
 {
     public class UsersDiseasesReadDTO
     {
+        public int idUsersDiseases { get; set; }
         public int idUser { get; set; }
         public int idDisease { get; set; }
         public DateTime occurrenceDate { get; set; }

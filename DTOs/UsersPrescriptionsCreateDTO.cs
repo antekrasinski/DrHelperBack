@@ -2,11 +2,11 @@
 
 namespace DrHelperBack.DTOs
 {
-    public class UsersPerscriptionsCreateDTO
+    public class UsersPrescriptionsCreateDTO
     {
         [Key]
         public int idUser { get; set; }
         [Key]
-        public int idPerscription { get; set; }
+        public int idPrescription { get; set; }
     }
 }

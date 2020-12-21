@@ -33,17 +33,21 @@ namespace DrHelperBack.Profiles
             CreateMap<UsersDiseasesCreateDTO, UsersDiseases>();
             CreateMap<UsersDiseases, UsersDiseasesCreateDTO>();
 
-            CreateMap<Perscription, PerscriptionReadDTO>();
-            CreateMap<PerscriptionCreateDTO, Perscription>();
-            CreateMap<Perscription, PerscriptionCreateDTO>();
+            CreateMap<Prescription, PrescriptionReadDTO>();
+            CreateMap<PrescriptionCreateDTO, Prescription>();
+            CreateMap<Prescription, PrescriptionCreateDTO>();
 
-            CreateMap<UsersPerscriptions, UsersPerscriptionsReadDTO>();
-            CreateMap<UsersPerscriptionsCreateDTO, UsersPerscriptions>();
-            CreateMap<UsersPerscriptions, UsersPerscriptionsCreateDTO>();
+            CreateMap<UsersPrescriptions, UsersPrescriptionsReadDTO>();
+            CreateMap<UsersPrescriptionsCreateDTO, UsersPrescriptions>();
+            CreateMap<UsersPrescriptions, UsersPrescriptionsCreateDTO>();
 
-            CreateMap<PerscriptionsMedicine, PerscriptionsMedicineReadDTO>();
-            CreateMap<PerscriptionsMedicineCreateDTO, PerscriptionsMedicine>();
-            CreateMap<PerscriptionsMedicine, PerscriptionsMedicineCreateDTO>();
+            CreateMap<PrescriptionsMedicine, PrescriptionsMedicineReadDTO>();
+            CreateMap<PrescriptionsMedicineCreateDTO, PrescriptionsMedicine>();
+            CreateMap<PrescriptionsMedicine, PrescriptionsMedicineCreateDTO>();
+
+            CreateMap<Appointment, AppointmentReadDTO>();
+            CreateMap<AppointmentCreateDTO, Appointment>();
+            CreateMap<Appointment, AppointmentCreateDTO>();
         }
     }
 }

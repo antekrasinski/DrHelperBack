@@ -8,17 +8,16 @@ using System.Collections.Generic;
 
 namespace DrHelperBack.Controllers
 {
-
     [Route("api/usersDiseases")]
     [ApiController]
     public class UsersDiseasesController : ControllerBase
     {
         private readonly IUsersDiseases _repositoryUsersDiseases;
-        private readonly IDrHelperRepo<User> _repositoryUser;
+        private readonly IUserRepo _repositoryUser;
         private readonly IDrHelperRepo<Disease> _repositoryDisease;
         private readonly IMapper _mapper;
 
-        public UsersDiseasesController(IUsersDiseases repositoryUsersDiseases, IDrHelperRepo<User> repositoryUser, IDrHelperRepo<Disease> repositoryDisease, IMapper mapper)
+        public UsersDiseasesController(IUsersDiseases repositoryUsersDiseases, IUserRepo repositoryUser, IDrHelperRepo<Disease> repositoryDisease, IMapper mapper)
         {
             _repositoryUsersDiseases = repositoryUsersDiseases;
             _repositoryUser = repositoryUser;
@@ -27,7 +26,7 @@ namespace DrHelperBack.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("user/{id}")]
         public ActionResult<IEnumerable<UsersDiseasesReadDTO>> GetUsersDiseases(int id)
         {
             var items = _repositoryUsersDiseases.GetUsersDiseases(id);
@@ -35,10 +34,10 @@ namespace DrHelperBack.Controllers
             return Ok(_mapper.Map<IEnumerable<UsersDiseasesReadDTO>>(items));
         }
 
-        [HttpGet("{idUser}/{idDisease}", Name = "GetByIds")]
-        public ActionResult<UsersDiseasesReadDTO> GetByIds(int idUser, int idDisease)
+        [HttpGet("{id}", Name = "GetUsersDiseasesById")]
+        public ActionResult<UsersDiseasesReadDTO> GetUsersDiseasesById(int idUsersDiseases)
         {
-            var item = _repositoryUsersDiseases.GetByIds(idUser, idDisease);
+            var item = _repositoryUsersDiseases.GetById(idUsersDiseases);
             if (item != null)
             {
                 return Ok(_mapper.Map<UsersDiseasesReadDTO>(item));
@@ -49,6 +48,7 @@ namespace DrHelperBack.Controllers
         [HttpPost]
         public ActionResult<UsersDiseasesCreateDTO> CreateConnection(UsersDiseasesCreateDTO dto)
         {
+            var typeModel = _mapper.Map<UsersDiseases>(dto);
             var userCheck = _repositoryUser.GetById(dto.idUser);
             if (userCheck == null)
             {
@@ -61,31 +61,24 @@ namespace DrHelperBack.Controllers
                 return BadRequest("Non existent disease.");
             }
 
-            var usersDiseasesCheck = _repositoryUsersDiseases.GetByIds(dto.idUser, dto.idDisease);
-            if (usersDiseasesCheck != null)
-            {
-                return BadRequest("Existent in database.");
-            }
-
             DateTime temp;
             if (!DateTime.TryParse(dto.occurrenceDate, out temp))
             {
                 return BadRequest("Wrong date format.");
             }
 
-            var typeModel = _mapper.Map<UsersDiseases>(dto);
             _repositoryUsersDiseases.Create(typeModel);
             _repositoryUsersDiseases.SaveChanges();
 
             var readDTO = _mapper.Map<UsersDiseasesReadDTO>(typeModel);
 
-            return CreatedAtRoute(nameof(GetByIds), new { idUser = readDTO.idUser, idDisease = readDTO.idDisease }, readDTO);
+            return CreatedAtRoute(nameof(GetUsersDiseasesById), new { id = readDTO.idUsersDiseases }, readDTO);
         }
 
-        [HttpPut("{idUser}/{idDisease}")]
-        public ActionResult UpdateMedicine(int idUser, int idDisease, UsersDiseasesCreateDTO dto)
+        [HttpPut("{idUsersDiseases}")]
+        public ActionResult UpdateMedicine(int idUsersDiseases, UsersDiseasesCreateDTO dto)
         {
-            var modelFromRepo = _repositoryUsersDiseases.GetByIds(idUser, idDisease);
+            var modelFromRepo = _repositoryUsersDiseases.GetById(idUsersDiseases);
             if (modelFromRepo == null)
             {
                 return NotFound();
@@ -118,10 +111,10 @@ namespace DrHelperBack.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{idUser}/{idDisease}")]
-        public ActionResult DeleteConnection(int idUser, int idDisease)
+        [HttpDelete("{idUsersDiseases}")]
+        public ActionResult DeleteConnection(int idUsersDiseases)
         {
-            var modelFromRepo = _repositoryUsersDiseases.GetByIds(idUser, idDisease);
+            var modelFromRepo = _repositoryUsersDiseases.GetById(idUsersDiseases);
             if (modelFromRepo == null)
             {
                 return NotFound();

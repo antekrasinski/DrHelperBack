@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace DrHelperBack.DTOs
 {
-    public class PerscriptionsMedicineReadDTO
+    public class PrescriptionsMedicineReadDTO
     {
-        public int idPerscription { get; set; }
+        public int idPrescription { get; set; }
         public int idMedicine { get; set; }
         public string amount { get; set; }
     }

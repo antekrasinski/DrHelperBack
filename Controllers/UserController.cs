@@ -13,11 +13,11 @@ namespace DrHelperBack.Controllers
 
     public class UserController : ControllerBase
     {
-        private readonly IDrHelperRepo<User> _repositoryUser;
+        private readonly IUserRepo _repositoryUser;
         private readonly IDrHelperRepo<UserType> _repositoryUserType;
         private readonly IMapper _mapper;
 
-        public UserController(IDrHelperRepo<User> repositoryUser, IDrHelperRepo<UserType> repositoryUserType, IMapper mapper)
+        public UserController(IUserRepo repositoryUser, IDrHelperRepo<UserType> repositoryUserType, IMapper mapper)
         {
             _repositoryUser = repositoryUser;
             _repositoryUserType = repositoryUserType;
@@ -42,6 +42,18 @@ namespace DrHelperBack.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate(SignInDTO dto)
+        {
+            var user = _repositoryUser.Authenticate(dto.username, dto.password);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(_mapper.Map<UserReadDTO>(user));
+        }
+
 
         [HttpPost]
         public ActionResult<UserCreateDTO> CreateUser(UserCreateDTO dto)
@@ -125,6 +137,7 @@ namespace DrHelperBack.Controllers
             {
                 return NotFound();
             }
+
             _repositoryUser.Delete(modelFromRepo);
             _repositoryUser.SaveChanges();
 

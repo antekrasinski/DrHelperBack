@@ -2,9 +2,9 @@
 
 namespace DrHelperBack.DTOs
 {
-    public class PerscriptionCreateDTO
+    public class PrescriptionCreateDTO
     {
         [Required]
-        public string perscriptionDate { get; set; }
+        public string prescriptionDate { get; set; }
     }
 }

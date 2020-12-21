@@ -2,12 +2,11 @@
 
 namespace DrHelperBack.Models
 {
-    public class UsersAppointments
+    public class UsersPrescriptions
     {
         [Key]
         public int idUser { get; set; }
         [Key]
-        public int idAppointment { get; set; }
-
+        public int idPrescription { get; set; }
     }
 }

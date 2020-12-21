@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DrHelperBack.DTOs
+namespace DrHelperBack.Models
 {
-    public class PerscriptionsMedicineCreateDTO
+    public class PrescriptionsMedicine
     {
         [Key]
-        public int idPerscription { get; set; }
+        public int idPrescription { get; set; }
         [Key]
         public int idMedicine { get; set; }
         [MaxLength(100)]
