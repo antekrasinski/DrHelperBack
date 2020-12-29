@@ -4,7 +4,13 @@ using DrHelperBack.DTOs;
 using DrHelperBack.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace DrHelperBack.Controllers
 {
@@ -16,12 +22,13 @@ namespace DrHelperBack.Controllers
         private readonly IUserRepo _repositoryUser;
         private readonly IDrHelperRepo<UserType> _repositoryUserType;
         private readonly IMapper _mapper;
-
-        public UserController(IUserRepo repositoryUser, IDrHelperRepo<UserType> repositoryUserType, IMapper mapper)
+        private readonly AppSettings _appSettings;
+        public UserController(IUserRepo repositoryUser, IDrHelperRepo<UserType> repositoryUserType, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _repositoryUser = repositoryUser;
             _repositoryUserType = repositoryUserType;
             _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet]
@@ -51,7 +58,30 @@ namespace DrHelperBack.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(_mapper.Map<UserReadDTO>(user));
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.idUser.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            return Ok(new
+            {
+                idUser = user.idUser,
+                username = user.username,
+                name = user.name,
+                surname = user.surname,
+                description = user.description,
+                idUserType = user.idUserType,
+                token = tokenString
+            });
         }
 
 
@@ -65,7 +95,14 @@ namespace DrHelperBack.Controllers
                 return BadRequest("Non existent user type.");
             }
 
-            _repositoryUser.Create(typeModel);
+            try
+            {
+                _repositoryUser.Create(typeModel, dto.password);
+            }
+            catch(ApplicationException e)
+            {
+                return BadRequest(e);
+            }
             _repositoryUser.SaveChanges();
 
             var readDTO = _mapper.Map<UserReadDTO>(typeModel);
@@ -88,9 +125,14 @@ namespace DrHelperBack.Controllers
             }
 
             _mapper.Map(dto, modelFromRepo);
-
-            _repositoryUser.Update(modelFromRepo);
-
+            try
+            {
+                _repositoryUser.Update(modelFromRepo, dto.password);
+            }
+            catch(ApplicationException e)
+            {
+                return BadRequest(e);
+            }
             _repositoryUser.SaveChanges();
 
             return NoContent();
@@ -122,7 +164,7 @@ namespace DrHelperBack.Controllers
 
             _mapper.Map(typeToPatch, modelFromRepo);
 
-            _repositoryUser.Update(modelFromRepo);
+            //_repositoryUser.Update(modelFromRepo, modelFromRepo.password);
 
             _repositoryUser.SaveChanges();
 

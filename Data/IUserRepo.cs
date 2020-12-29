@@ -12,8 +12,9 @@ namespace DrHelperBack.Data
         bool SaveChanges();
         IEnumerable<User> GetAll();
         User GetById(int id);
-        void Create(User newOne);
-        void Update(User oneToUpdate);
+        void Create(User newOne, string password);
+        void Update(User oneToUpdate, string password);
         void Delete(User oneToDelete);
+
     }
 }

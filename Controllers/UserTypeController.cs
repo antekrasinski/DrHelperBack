@@ -2,6 +2,7 @@
 using DrHelperBack.Data;
 using DrHelperBack.DTOs;
 using DrHelperBack.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
