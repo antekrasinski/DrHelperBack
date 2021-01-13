@@ -56,8 +56,9 @@ namespace DrHelperBack.Controllers
             var user = _repositoryUser.Authenticate(dto.username, dto.password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
+            {
+                return BadRequest("Autentication problem.");
+            }
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
